@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Ratings - Marcos Jr. Sentiment Analysis{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="fw-bold mb-1">
+                        <i class="fas fa-star text-warning me-2"></i>
+                        Ratings Dashboard
+                    </h2>
+                    <p class="text-muted mb-0">5-Star Rating System Analytics</p>
+                </div>
+                <div>
+                    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-outline-primary me-2">
+                        <i class="fas fa-arrow-left me-1"></i>Back to Dashboard
+                    </a>
+                    <a href="{{ url_for('admin_logout') }}" class="btn btn-outline-danger">
+                        <i class="fas fa-sign-out-alt me-1"></i>Logout
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rating Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-lg-6 col-md-6 mb-3">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="fw-bold">{{ ratings|length }}</h4>
+                            <p class="mb-0">Total Ratings</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-star fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 mb-3">
+            <div class="card bg-warning text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h4 class="fw-bold">{{ avg_rating }}</h4>
+                            <p class="mb-0">Average Rating</p>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-chart-line fa-2x opacity-75"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-chart-bar me-2"></i>
+                        Rating Distribution
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="ratingChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-star-half-alt me-2"></i>
+                        Rating Breakdown
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% for i in range(5, 0, -1) %}
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="me-3" style="width: 60px;">
+                            <span class="fw-semibold">{{ i }} ⭐</span>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="progress" style="height: 20px;">
+                                {% set count = rating_counts.get(i, 0) %}
+                                {% set percentage = (count / ratings|length * 100) if ratings|length > 0 else 0 %}
+                                <div class="progress-bar bg-warning" role="progressbar" 
+                                     style="width: {{ percentage }}%" 
+                                     aria-valuenow="{{ percentage }}" 
+                                     aria-valuemin="0" 
+                                     aria-valuemax="100">
+                                    {{ count }}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ms-3" style="width: 50px;">
+                            <small class="text-muted">{{ "%.1f"|format(percentage) }}%</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ratings Table -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-list me-2"></i>
+                        Recent Ratings
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% if ratings %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Date Submitted</th>
+                                        <th>Rating</th>
+                                        <th>Stars</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for rating in ratings[:50] %}
+                                    <tr>
+                                        <td>{{ rating.date_submitted.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                                        <td>
+                                            <span class="badge bg-primary fs-6">{{ rating.rating_value }}</span>
+                                        </td>
+                                        <td>
+                                            {% for i in range(1, 6) %}
+                                                {% if i <= rating.rating_value %}
+                                                    <i class="fas fa-star text-warning"></i>
+                                                {% else %}
+                                                    <i class="far fa-star text-muted"></i>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% if ratings|length > 50 %}
+                        <div class="text-center mt-3">
+                            <small class="text-muted">Showing latest 50 ratings out of {{ ratings|length }} total</small>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <div class="text-center text-muted py-5">
+                            <i class="fas fa-star fa-3x mb-3 opacity-50"></i>
+                            <h5>No ratings submitted yet</h5>
+                            <p>Ratings will appear here once users start rating their experience.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Rating Bar Chart
+    const ctx = document.getElementById('ratingChart').getContext('2d');
+    const ratingData = {
+        1: {{ rating_counts.get(1, 0) }},
+        2: {{ rating_counts.get(2, 0) }},
+        3: {{ rating_counts.get(3, 0) }},
+        4: {{ rating_counts.get(4, 0) }},
+        5: {{ rating_counts.get(5, 0) }}
+    };
+    
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['1 Star', '2 Stars', '3 Stars', '4 Stars', '5 Stars'],
+            datasets: [{
+                label: 'Number of Ratings',
+                data: [ratingData[1], ratingData[2], ratingData[3], ratingData[4], ratingData[5]],
+                backgroundColor: [
+                    '#dc3545',
+                    '#fd7e14',
+                    '#ffc107',
+                    '#20c997',
+                    '#28a745'
+                ],
+                borderColor: [
+                    '#dc3545',
+                    '#fd7e14',
+                    '#ffc107',
+                    '#20c997',
+                    '#28a745'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        stepSize: 1
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

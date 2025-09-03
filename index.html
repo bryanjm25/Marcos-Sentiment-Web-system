@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Marcos Jr. Sentiment Analysis{% endblock %}
+
+{% block content %}
+<div class="hero-section bg-gradient-primary text-white py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h1 class="display-4 fw-bold mb-4">Share Your Thoughts</h1>
+                <p class="lead mb-4">Help us understand public sentiment about Philippine President Ferdinand Marcos Jr. Your feedback matters and contributes to valuable insights.</p>
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-shield-alt text-warning me-2"></i>
+                    <small>Your feedback is processed securely and anonymously</small>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="text-center">
+                    <i class="fas fa-comments display-1 text-warning opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-white border-0 text-center py-4">
+                    <h3 class="card-title mb-0">
+                        <i class="fas fa-pen-alt text-primary me-2"></i>
+                        Submit Your Feedback
+                    </h3>
+                    <p class="text-muted mt-2">Share your thoughts and rate your experience</p>
+                </div>
+                <div class="card-body p-4">
+                    <form id="feedbackForm">
+                        <!-- Feedback Text Area -->
+                        <div class="mb-4">
+                            <label for="feedback" class="form-label fw-semibold">
+                                <i class="fas fa-comment-dots me-1"></i>Your Feedback
+                            </label>
+                            <textarea class="form-control form-control-lg" id="feedback" name="feedback" rows="5" 
+                                placeholder="Share your thoughts about President Marcos Jr.'s leadership." 
+                                required></textarea>
+                            <div class="form-text">
+                                <i class="fas fa-info-circle me-1"></i>
+                                Your feedback will be analyzed for sentiment and stored securely.
+                            </div>
+                        </div>
+
+                        <!-- Star Rating -->
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold">
+                                <i class="fas fa-star me-1"></i>Rate Your Experience (Optional)
+                            </label>
+                            <div class="star-rating d-flex align-items-center">
+                                <div class="stars me-3">
+                                    <input type="radio" name="rating" value="1" id="star1">
+                                    <label for="star1" class="star"><i class="fas fa-star"></i></label>
+                                    
+                                    <input type="radio" name="rating" value="2" id="star2">
+                                    <label for="star2" class="star"><i class="fas fa-star"></i></label>
+                                    
+                                    <input type="radio" name="rating" value="3" id="star3">
+                                    <label for="star3" class="star"><i class="fas fa-star"></i></label>
+                                    
+                                    <input type="radio" name="rating" value="4" id="star4">
+                                    <label for="star4" class="star"><i class="fas fa-star"></i></label>
+                                    
+                                    <input type="radio" name="rating" value="5" id="star5">
+                                    <label for="star5" class="star"><i class="fas fa-star"></i></label>
+                                </div>
+                                <span class="rating-text text-muted">Click to rate</span>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>
+                                Submit Feedback
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="bg-light py-5">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-12 mb-5">
+                <h2 class="fw-bold">How It Works</h2>
+                <p class="text-muted">Understanding our sentiment analysis process</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-edit fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">1. Submit Feedback</h5>
+                        <p class="card-text text-muted">Share your thoughts and opinions about President Marcos Jr. in the feedback form above.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-brain fa-3x text-success"></i>
+                        </div>
+                        <h5 class="card-title">2. AI Analysis</h5>
+                        <p class="card-text text-muted">Our advanced AI model analyzes your feedback to determine sentiment (Positive, Negative, or Neutral).</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-chart-bar fa-3x text-info"></i>
+                        </div>
+                        <h5 class="card-title">3. Generate Insights</h5>
+                        <p class="card-text text-muted">Your feedback contributes to comprehensive analytics and insights about public sentiment.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade" id="successModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    Feedback Submitted Successfully!
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-thumbs-up fa-3x text-success"></i>
+                </div>
+                <p class="mb-0">Thank you for your feedback! Your response has been recorded and will contribute to our sentiment analysis.</p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('feedbackForm');
+    const stars = document.querySelectorAll('.star');
+    const ratingText = document.querySelector('.rating-text');
+    
+    // Star rating functionality
+    stars.forEach((star, index) => {
+        star.addEventListener('click', function() {
+            const rating = index + 1;
+            updateStarDisplay(rating);
+            updateRatingText(rating);
+        });
+        
+        star.addEventListener('mouseenter', function() {
+            const rating = index + 1;
+            highlightStars(rating);
+        });
+    });
+    
+    document.querySelector('.stars').addEventListener('mouseleave', function() {
+        const checkedStar = document.querySelector('input[name="rating"]:checked');
+        if (checkedStar) {
+            updateStarDisplay(parseInt(checkedStar.value));
+        } else {
+            resetStars();
+        }
+    });
+    
+    function updateStarDisplay(rating) {
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
+        });
+    }
+    
+    function highlightStars(rating) {
+        stars.forEach((star, index) => {
+            if (index < rating) {
+                star.classList.add('hover');
+            } else {
+                star.classList.remove('hover');
+            }
+        });
+    }
+    
+    function resetStars() {
+        stars.forEach(star => {
+            star.classList.remove('hover');
+        });
+    }
+    
+    function updateRatingText(rating) {
+        const texts = {
+            1: 'Poor',
+            2: 'Fair', 
+            3: 'Good',
+            4: 'Very Good',
+            5: 'Excellent'
+        };
+        ratingText.textContent = texts[rating];
+        ratingText.classList.add('text-warning', 'fw-semibold');
+    }
+    
+    // Form submission
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(form);
+        const submitBtn = form.querySelector('button[type="submit"]');
+        
+        // Show loading state
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+        submitBtn.disabled = true;
+        
+        fetch('/submit_feedback', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Show success modal
+                const modal = new bootstrap.Modal(document.getElementById('successModal'));
+                modal.show();
+                
+                // Reset form
+                form.reset();
+                resetStars();
+                ratingText.textContent = 'Click to rate';
+                ratingText.classList.remove('text-warning', 'fw-semibold');
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred. Please try again.');
+        })
+        .finally(() => {
+            // Reset button
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane me-2"></i>Submit Feedback';
+            submitBtn.disabled = false;
+        });
+    });
+});
+</script>
+{% endblock %}
